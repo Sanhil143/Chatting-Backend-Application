@@ -9,6 +9,7 @@ server.use(express.json());
 
 connectionDb();
 
+
 server.use('/user', userRoute);
 
 server.listen(process.env.PORT , () => {
