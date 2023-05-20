@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { appConfig } from '../../configs/urlconfig'
 import { Button, FormControl, FormLabel, Input, InputGroup, 
       InputRightElement, VStack, useToast } from '@chakra-ui/react'
 
@@ -48,8 +49,8 @@ const Signup = () => {
                               'Content-type':'application/json',
                         },
                   }
-                  const body = JSON.stringify({name,email,password,picture})
-                  const res = await axios.post('http://localhost:5000/user/signup',body,config);
+                  const body = {name,email,password,picture}
+                  const res = await axios.post(`${appConfig.API_URL}/user/signup`,body,config);
                   console.log(res);
                   toast({
                         title:'Registration Successful',
@@ -128,7 +129,7 @@ const Signup = () => {
                               onChange={(e) => setName(e.target.value)}
                         />
                   </FormControl>
-                  <FormControl id='email' isRequired>
+                  <FormControl id='Email' isRequired>
                         <FormLabel>Email</FormLabel>
                         <Input
                               type='email'
@@ -136,7 +137,7 @@ const Signup = () => {
                               onChange={(e) => setEmail(e.target.value)}
                         />
                   </FormControl>
-                  <FormControl id='password' isRequired>
+                  <FormControl id='Password' isRequired>
                         <FormLabel>Password</FormLabel>
                         <InputGroup size="md">
                               <Input
