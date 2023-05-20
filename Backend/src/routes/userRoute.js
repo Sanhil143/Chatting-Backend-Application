@@ -12,4 +12,3 @@ router.get('/getUser', auth, getAllUser);
 module.exports = router;
 
 
-
