@@ -18,8 +18,9 @@ const createUser = async (req, res) => {
             let hashedPass = bcrypt.hashSync(password,saltRound);
             data.password = hashedPass;
             const user = await userModel.create(data)
+            const jwtToken = generateToken(user._id)
             if (user) {
-                  return res.status(201).send({ status: true, message: 'user created succesfully' })
+                  return res.status(201).send({ status: true, message: 'user created succesfully',token:jwtToken})
             }
       } catch (err) {
             return res.status(500).send({ status: false, error: err.message })
@@ -49,4 +50,19 @@ const loginUser = async (req,res) => {
       }
 }
 
-module.exports = { createUser,loginUser }
+const getAllUser = async (req,res) => {
+      const query = req.query.search 
+      ? {
+            $or:[
+                  {name:{regex:req.query.search, $options:'i'}}
+            ],
+      }
+      :{};
+      
+      const user = await userModel.find(query)
+      .find({_id:{$ne:req.user._id}});
+      return res.status(200).send(user)
+}
+
+
+module.exports = { createUser,loginUser,getAllUser }
