@@ -36,7 +36,8 @@ const Login = () => {
                         },
                   };
                   const body = {email,password}
-                  const res = await axios.post(`${appConfig.API_URL}/user/login`,body,config) ;
+                  const res = await axios.post(`${appConfig.API_URL}/user/login`,body,config);
+                  console.log(res);
                   toast({
                         title:'Login Successfull',
                         status:'success',
@@ -90,7 +91,8 @@ const Login = () => {
                   colorScheme='blue'
                   width='100%'
                   style={{marginTop:15}}
-                  onClick={submitHandler}>
+                  onClick={submitHandler}
+                  isLoading={loading}>
                         Login
                   </Button>
             </VStack>
