@@ -2,10 +2,13 @@ const express = require('express');
 const connectionDb = require('./config/dbconfig')
 const userRoute = require('./routes/userRoute')
 
-require('colors')
-require('dotenv').config();
+const colors = require('colors')
+const dotenv = require('dotenv').config();
+const cors = require('cors')
+
 const server = express();
 server.use(express.json());
+server.use(cors())
 
 connectionDb();
 
