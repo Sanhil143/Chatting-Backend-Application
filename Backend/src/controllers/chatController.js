@@ -60,10 +60,99 @@ const fetchChat = async (req, res) => {
                         return res.status(200).send({ status: true, res1 });
 
                   })
-                  console.log(data);
+            console.log(data);
       } catch (error) {
             return res.status(500).send({ status: false, message: error.message })
       }
 }
 
-module.exports = { createChat, fetchChat }
+const createGroupChat = async (req, res) => {
+      if (!req.body.users || !req.body.name) {
+            return res.status(400).send({ status: false, message: 'Please fill all the field' });
+      }
+
+      var user = JSON.parse(req.body.users);
+
+      if (user.length < 2) {
+            return res.status(400).send({ status: false, message: 'Required more than 2 user in group chat' });
+      }
+      user.push(req.user);
+      try {
+            const groupChat = await chatModel.create({
+                  chatName: req.body.name,
+                  users: user,
+                  isGroupChat: true,
+                  groupAdmin: req.user,
+            });
+
+            const fullGroupChat = await chatModel.findOne({ _id: groupChat._id })
+                  .populate('users', '-password')
+                  .populate('groupAdmin', '-password');
+
+            return res.status(200).send({ status: true, fullGroupChat });
+      } catch (error) {
+            return res.status(500).send({ status: false, message: error.message });
+      }
+}
+
+const renameGroup = async (req, res) => {
+      try {
+            const { chatId, chatName } = req.body;
+
+            const updatedChat = await chatModel.findByIdAndUpdate(chatId, { $set: { chatName: chatName } },
+                  { new: true })
+                  .populate('users', '-password')
+                  .populate('groupAdmin', '-password');
+            if (!updatedChat) {
+                  return res.status(400).send({ Status: false, message: 'something went wrong on group' })
+            } else {
+                  return res.status(200).send({ status: true, updatedChat });
+            }
+      } catch (error) {
+            return res.status(500).send({ status: false, message: error.message })
+      }
+}
+
+const removeFromGroup = async (req, res) => {
+      try {
+            const { chatId, userId } = req.body;
+
+            const removed = await chatModel.findByIdAndUpdate(
+                  chatId, {
+                  $pull: { users: userId },
+            }, { new: true }
+            ).populate('users', '-password')
+                  .populate('groupAdmin', '-password');
+
+            if (!removed) {
+                  return res.status(400).send({ status: false, message: 'something went wrong in group' })
+            } else {
+                  return res.status(200).send({ Status: true, removed })
+            }
+      } catch (error) {
+            return res.status(500).send({ Status: false, message: error.message });
+      }
+}
+
+const addTOGroup = async (req, res) => {
+      try {
+            const { chatId, userId } = req.body;
+
+            const added = await chatModel.findByIdAndUpdate(
+                  chatId, {
+                  $push: { users: userId }
+            }, { new: true }
+            ).populate('users', '-password')
+                  .populate('groupAdmin', '-password')
+
+            if (!added) {
+                  return res.status(400).send({ status: false, message: 'something went wrong in group' })
+            } else {
+                  return res.status(200).semd({ status: true, added })
+            }
+      } catch (error) {
+            return res.staus(500).send({ status: false , message: error.message})
+      }
+}
+
+module.exports = { createChat, fetchChat, createGroupChat, renameGroup, removeFromGroup, addTOGroup }
