@@ -38,7 +38,6 @@ const Login = () => {
                   };
                   const body = {email,password}
                   const res = await axios.post(`${appConfig.API_URL}/user/login`,body,config);
-                  console.log(res);
                   toast({
                         title:'Login Successfull',
                         status:'success',
