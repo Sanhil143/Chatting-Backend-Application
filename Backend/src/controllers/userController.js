@@ -36,6 +36,7 @@ const loginUser = async (req,res) => {
                   return res.status(400).send({status:false, message:'Please enter all fields'});
             }
             const checkUser = await userModel.findOne({email});
+            // console.log(checkUser);
             if(!checkUser){
                   return res.status(400).send({status:false, message:'email is not exist'});
             }
@@ -43,8 +44,19 @@ const loginUser = async (req,res) => {
             if(!bcryptPass){
                   return res.status(400).send({status:false, message:'enter your correct password'});
             }
+            let user = {}
+            user._id = checkUser._id
+            user.name = checkUser.name
+            user.email = checkUser.email
+            user.picture = checkUser.picture
+            user.isAdmin = checkUser.isAdmin
+
             let jwtToken = generateToken(checkUser._id)
-            return res.status(200).send({status:true, message:'successfully login',token:jwtToken})
+
+            user.token = jwtToken
+
+            console.log(user);
+            return res.status(200).send({status:true, message:'successfully login', user})
       } catch (err) {
             return res.status(500).send({status:false, error:err.message});
       }

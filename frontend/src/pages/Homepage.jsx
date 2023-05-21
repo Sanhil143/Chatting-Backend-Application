@@ -19,7 +19,7 @@ const Homepage = () => {
           fontSize="4xl"
           textAlign="center"
           fontFamily="work sans">
-          ©️hit-©️hat
+          ©️hit❤️©️hat
         </Text>
       </Box>
       <Box

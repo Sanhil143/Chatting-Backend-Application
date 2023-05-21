@@ -148,10 +148,10 @@ const addTOGroup = async (req, res) => {
             if (!added) {
                   return res.status(400).send({ status: false, message: 'something went wrong in group' })
             } else {
-                  return res.status(200).semd({ status: true, added })
+                  return res.status(200).send({ status: true, added })
             }
       } catch (error) {
-            return res.staus(500).send({ status: false , message: error.message})
+            return res.status(500).send({ status: false , message: error.message})
       }
 }
 
