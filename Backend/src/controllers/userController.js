@@ -61,15 +61,11 @@ const loginUser = async (req, res) => {
       }
 }
 
+
+
 const getAllUser = async (req, res) => {
       const query = req.query.search
-            ? {
-                  $or: [
-                        { name: { regex: req.query.search, $options: 'i' } }
-                  ],
-            }
-            : {};
-
+            
       const user = await userModel.find(query)
             .find({ _id: { $ne: req.user._id } });
       return res.status(200).send(user)
