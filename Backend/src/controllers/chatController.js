@@ -57,10 +57,9 @@ const fetchChat = async (req, res) => {
                               path: "latestMessage.sender",
                               select: "name picture email",
                         })
-                        return res.status(200).send({ status: true, res1 });
+                        return res.status(200).send(  res1 );
 
                   })
-            console.log(data);
       } catch (error) {
             return res.status(500).send({ status: false, message: error.message })
       }
