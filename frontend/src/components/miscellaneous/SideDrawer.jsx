@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Tooltip, Button, Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast } from '@chakra-ui/react'
+import { Box, Tooltip, Button, Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react'
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChatState } from '../../context/ChatProvider';
 import ProfileModal from './ProfileModal';
@@ -59,7 +59,7 @@ const SideDrawer = () => {
                         position: 'bottom-left'
                   });
             }
-      }           
+      }
 
       const accessChat = async (userId) => {
             try {
@@ -71,9 +71,15 @@ const SideDrawer = () => {
                         }
                   };
                   const { data } = await axios.post(`${appConfig.API_URL}/chat/createChat`, { userId }, config);
-
-                  if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-                      
+                  // console.log(data);
+                  // if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+                  const chatExists = chats.find((chat) => chat._id === data._id);
+                  if (!chatExists) {
+                        // console.log('data',data);
+                        // console.log('chat',chats);
+                        setChats([data, ...chats]);
+                  }
+                  
                   setSelectedChat(data);
                   setLoadingChat(false);
                   onClose();
@@ -90,7 +96,7 @@ const SideDrawer = () => {
             }
       }
 
-
+      // console.log(searchResult);
       return (
             <>
                   <Box
@@ -164,7 +170,7 @@ const SideDrawer = () => {
                                                 />
                                           ))
                                     )}
-                                    {loadingChat}
+                                    {loadingChat && <Spinner ml='auto' display='flex' />}
                               </DrawerBody>
                         </DrawerContent>
                   </Drawer>

@@ -9,7 +9,7 @@ import { getSender } from '../../configs/ChatLogics'
 
 const MyChat = () => {
   
-  const [loggedUser, setLoggedUser] = useState();
+  const [loggedUser, setLoggedUser] = useState('');
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast()
 
@@ -21,7 +21,7 @@ const MyChat = () => {
         }
       }
       const { data } = await axios.get(`${appConfig.API_URL}/chat/fetchChat`, config);
-      console.log(data);
+      // console.log(data);
       setChats(data)
     } catch (error) {
       toast({
@@ -38,6 +38,7 @@ const MyChat = () => {
     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
     fetchChats();
   }, []);
+
   return (
     <Box display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
       flexDir='column'
@@ -77,7 +78,9 @@ const MyChat = () => {
         borderRadius='lg'
         overflowY='hidden'
       >
+           
         {
+          
           chats ? (
           <Stack overflowY='scroll'>
             {chats.map((chat) => (
@@ -92,10 +95,7 @@ const MyChat = () => {
                 key={chat._id}
               >
               <Text>
-                {!chat.isGroupChat
-                ? getSender(loggedUser, chat.users)
-                : chat.chatName 
-                }
+                {!chat.isGroupChat ? getSender(loggedUser, chat.users):(chat.chatName)}
               </Text>
               </Box>
             ))}
@@ -107,5 +107,4 @@ const MyChat = () => {
     </Box>
   )
 }
-
 export default MyChat
