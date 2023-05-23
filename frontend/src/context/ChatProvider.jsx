@@ -7,7 +7,7 @@ const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
   const [user, setUser] = useState();
   const [notification, setNotification] = useState();
-  const [chat, setChat] = useState();
+  const [chats, setChats] = useState([]);
 
   const history = useHistory();
 
@@ -28,8 +28,8 @@ const ChatProvider = ({ children }) => {
         setUser,
         notification,
         setNotification,
-        chat,
-        setChat
+        chats,
+        setChats
       }}
     >
       {children}
@@ -40,4 +40,4 @@ export const ChatState = () => {
   return useContext(ChatContext);
 }
 
-export default ChatProvider
+export default ChatProvider;
