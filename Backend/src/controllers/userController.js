@@ -20,7 +20,12 @@ const createUser = async (req, res) => {
             const user = await userModel.create(data)
             const jwtToken = generateToken(user._id)
             if (user) {
-                  return res.status(201).send({ status: true, message: 'user created succesfully', token: jwtToken })
+                  return res.status(201).send({_id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        picture: user.picture,
+                        isAdmin: user.isAdmin,
+                        token: jwtToken })
             }
       } catch (err) {
             return res.status(500).send({ status: false, error: err.message })
